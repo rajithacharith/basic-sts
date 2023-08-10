@@ -1,6 +1,6 @@
 import ballerina/log;
 
-type Application record {
+public type Application record {
     string clientId;
     string clientSecret;
 };
