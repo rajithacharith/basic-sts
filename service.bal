@@ -1,6 +1,7 @@
 import ballerina/log;
 import ballerina/regex;
 import ballerina/lang.array;
+import bal_basic_sts.applications;
 import ballerina/http;
 
 
@@ -37,14 +38,13 @@ service /oauth2 on new http:Listener(9090) {
         string clientId = decodedArray[0];
         string clientSecret = decodedArray[1];
 
-        // validate ClientId, Secret
-        if (clientId != "admin" || clientSecret != "admin") {
-            return <http:BadRequest>{body: "Invalid client credentials"};
+        if applications:validateApplication(clientId, clientSecret) {
+            return {
+                access_token: "",
+                token_type: "",
+                expires_in: ""
+            };
         }
-        return {
-            access_token: "",
-            token_type: "",
-            expires_in: ""
-        };
+        return <http:BadRequest>{body: "Invalid client credentials"}; 
     }
 }
